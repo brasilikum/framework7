@@ -12,7 +12,7 @@ def main():
 
 def generate_font_files():
   print("Generate Fonts")
-  cmd = "fontforge -script %s/generate_font.py" % (BUILDER_PATH)
+  cmd = f"fontforge -script {BUILDER_PATH}/generate_font.py"
   call(cmd, shell=True)
 
 if __name__ == "__main__":

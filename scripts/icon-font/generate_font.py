@@ -38,24 +38,22 @@ for dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):
     size = os.path.getsize(filePath)
     if ext in ['.svg', '.eps']:
       if ext in ['.svg']:
-        # hack removal of <switch> </switch> tags
-        svgfile = open(filePath, 'r+')
-        tmpsvgfile = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
-        svgtext = svgfile.read()
-        svgfile.seek(0)
+        with open(filePath, 'r+') as svgfile:
+          tmpsvgfile = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
+          svgtext = svgfile.read()
+          svgfile.seek(0)
 
-        # replace the <switch> </switch> tags with 'nothing'
-        svgtext = svgtext.replace('<switch>', '')
-        svgtext = svgtext.replace('</switch>', '')
+          # replace the <switch> </switch> tags with 'nothing'
+          svgtext = svgtext.replace('<switch>', '')
+          svgtext = svgtext.replace('</switch>', '')
 
-        bytes = svgtext.encode(encoding='UTF-8')
-        tmpsvgfile.file.write(bytes)
+          bytes = svgtext.encode(encoding='UTF-8')
+          tmpsvgfile.file.write(bytes)
 
-        svgfile.close()
         tmpsvgfile.file.close()
 
         filePath = tmpsvgfile.name
-        # end hack
+              # end hack
 
       glyph = f.createChar(-1, name)
       glyph.importOutlines(filePath)
@@ -85,17 +83,20 @@ for dirname, dirnames, filenames in os.walk(INPUT_SVG_DIR):
     if AUTO_WIDTH:
       f.autoWidth(0, 0, 512)
 
-fontfile = '%s/framework7-core-icons' % (OUTPUT_FONT_DIR)
+fontfile = f'{OUTPUT_FONT_DIR}/framework7-core-icons'
 print(fontfile);
 
 f.fontname = font_name
 f.familyname = font_name
 f.fullname = font_name
 
-f.generate(fontfile + '.ttf')
+f.generate(f'{fontfile}.ttf')
 
 # Hint the TTF file
-subprocess.call('ttfautohint -s -f -n ' + fontfile + '.ttf ' + fontfile + '-hinted.ttf > /dev/null 2>&1 && mv ' + fontfile + '-hinted.ttf ' + fontfile + '.ttf', shell=True)
+subprocess.call(
+    f'ttfautohint -s -f -n {fontfile}.ttf {fontfile}-hinted.ttf > /dev/null 2>&1 && mv {fontfile}-hinted.ttf {fontfile}.ttf',
+    shell=True,
+)
 
 # WOFF2 Font
-subprocess.call('woff2_compress ' + fontfile + '.ttf', shell=True)
+subprocess.call(f'woff2_compress {fontfile}.ttf', shell=True)

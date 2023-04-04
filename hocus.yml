@@ -9,3 +9,5 @@ tasks:
 vscode:
   extensions:
     - redhat.vscode-yaml
+    - svelte.svelte-vscode
+    - christian-kohler.npm-intellisense

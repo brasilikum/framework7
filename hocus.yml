@@ -1,0 +1,11 @@
+image:
+  buildContext: .
+  # The Dockerfile MUST extend `hocusdev/workspace`.
+  file: hocus.Dockerfile
+tasks:
+  - name: First task
+    prebuild: sudo apt install npm -y
+    workspace: echo "This executes every time the workspace is started"
+vscode:
+  extensions:
+    - redhat.vscode-yaml

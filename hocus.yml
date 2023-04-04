@@ -4,8 +4,8 @@ image:
   file: hocus.Dockerfile
 tasks:
   - name: First task
-    prebuild: sudo apt install npm -y
-    workspace: echo "This executes every time the workspace is started"
+    prebuild: yarn
+    workspace: yarn svelte
 vscode:
   extensions:
     - redhat.vscode-yaml
